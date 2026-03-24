@@ -1,0 +1,1 @@
+web: cd backend && mvn clean package && java -jar target/egov-backend-1.0.jar
