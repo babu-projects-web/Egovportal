@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register – NagarSeva</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-[#F7F6F2] text-[#1a1a1a] font-sans">
+
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-[#F7F6F2]/90 backdrop-blur border-b border-[#e5e3dc]">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-2.5">
+        <div class="w-8 h-8 bg-[#1a6b3c] rounded-lg flex items-center justify-center">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L2 6V16H7V11H11V16H16V6L9 2Z" fill="white"/></svg>
+        </div>
+        <span class="font-display text-xl font-700">NagarSeva</span>
+      </a>
+      <a href="login.html" class="btn-ghost text-sm">Login</a>
+    </div>
+  </nav>
+
+  <main class="pt-24 pb-16 px-4">
+    <div class="max-w-2xl mx-auto">
+      <div class="text-center mb-8">
+        <h1 class="font-display text-3xl font-700">Create Your Account</h1>
+        <p class="text-[#777] text-sm mt-1">Register to access all citizen services</p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-[#e5e3dc] shadow-sm p-8">
+        <div id="alertBox" class="hidden mb-5"></div>
+
+        <form id="registerForm" class="space-y-5">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="form-label">Full Name *</label>
+              <input type="text" id="fullName" class="form-input" placeholder="Ravi Kumar" required>
+            </div>
+            <div>
+              <label class="form-label">Date of Birth *</label>
+              <input type="date" id="dob" class="form-input" required>
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="form-label">Email Address *</label>
+              <input type="email" id="email" class="form-input" placeholder="you@example.com" required>
+            </div>
+            <div>
+              <label class="form-label">Mobile Number *</label>
+              <input type="tel" id="phone" class="form-input" placeholder="9876543210" pattern="[0-9]{10}" required>
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="form-label">Aadhaar Number *</label>
+              <input type="text" id="aadhaar" class="form-input" placeholder="XXXX XXXX XXXX" maxlength="14" required>
+            </div>
+            <div>
+              <label class="form-label">Ward Number *</label>
+              <select id="ward" class="form-input" required>
+                <option value="">Select Ward...</option>
+                <option>Ward 1 – Gandhi Nagar</option>
+                <option>Ward 2 – Suramangalam</option>
+                <option>Ward 3 – Fairlands</option>
+                <option>Ward 4 – Hasthampatti</option>
+                <option>Ward 5 – Ammapet</option>
+                <option>Ward 6 – Kondalampatti</option>
+                <option>Ward 7 – Shevapet</option>
+                <option>Ward 8 – Meyyanur</option>
+                <option>Ward 9 – Gugai</option>
+                <option>Ward 10 – Swarnapuri</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="form-label">Residential Address *</label>
+            <textarea id="address" rows="2" class="form-input resize-none" placeholder="Door No., Street, Area..." required></textarea>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="form-label">Password *</label>
+              <input type="password" id="password" class="form-input" placeholder="Min 8 characters" minlength="8" required>
+            </div>
+            <div>
+              <label class="form-label">Confirm Password *</label>
+              <input type="password" id="confirmPassword" class="form-input" placeholder="Repeat password" required>
+            </div>
+          </div>
+
+          <!-- Password strength -->
+          <div id="passwordStrength" class="hidden">
+            <div class="flex gap-1 h-1">
+              <div id="str1" class="flex-1 rounded bg-[#e5e3dc]"></div>
+              <div id="str2" class="flex-1 rounded bg-[#e5e3dc]"></div>
+              <div id="str3" class="flex-1 rounded bg-[#e5e3dc]"></div>
+              <div id="str4" class="flex-1 rounded bg-[#e5e3dc]"></div>
+            </div>
+            <p id="strLabel" class="text-xs mt-1 text-[#999]"></p>
+          </div>
+
+          <label class="flex items-start gap-2.5 cursor-pointer">
+            <input type="checkbox" id="terms" class="mt-0.5 accent-[#1a6b3c]" required>
+            <span class="text-sm text-[#555]">I agree to the <a href="#" class="text-[#1a6b3c] underline">Terms of Service</a> and <a href="#" class="text-[#1a6b3c] underline">Privacy Policy</a></span>
+          </label>
+
+          <button type="submit" id="submitBtn" class="btn-primary w-full py-3 text-base">
+            Create Account
+          </button>
+        </form>
+
+        <div class="mt-6 pt-5 border-t border-[#f0efe9] text-center text-sm text-[#777]">
+          Already registered? <a href="login.html" class="text-[#1a6b3c] font-medium hover:underline">Sign in</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../js/app.js"></script>
+  <script>
+    // Aadhaar auto-format
+    document.getElementById('aadhaar').addEventListener('input', (e) => {
+      let v = e.target.value.replace(/\D/g, '').slice(0, 12);
+      e.target.value = v.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
+    });
+
+    // Password strength
+    document.getElementById('password').addEventListener('input', (e) => {
+      const val = e.target.value;
+      const box = document.getElementById('passwordStrength');
+      box.classList.remove('hidden');
+      const checks = [val.length >= 8, /[A-Z]/.test(val), /[0-9]/.test(val), /[^A-Za-z0-9]/.test(val)];
+      const score = checks.filter(Boolean).length;
+      const colors = ['', '#ef4444', '#f59e0b', '#3b82f6', '#1a6b3c'];
+      const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById(`str${i}`).style.background = i <= score ? colors[score] : '#e5e3dc';
+      }
+      document.getElementById('strLabel').textContent = labels[score] ? `Password strength: ${labels[score]}` : '';
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const alertBox = document.getElementById('alertBox');
+      const btn = document.getElementById('submitBtn');
+
+      const pw = document.getElementById('password').value;
+      const cpw = document.getElementById('confirmPassword').value;
+      if (pw !== cpw) {
+        alertBox.className = 'alert-error mb-5 text-sm';
+        alertBox.textContent = '❌ Passwords do not match.';
+        alertBox.classList.remove('hidden');
+        return;
+      }
+
+      btn.textContent = 'Creating account...';
+      btn.disabled = true;
+
+      const payload = {
+        fullName: document.getElementById('fullName').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        aadhaar: document.getElementById('aadhaar').value.replace(/\s/g,''),
+        dob: document.getElementById('dob').value,
+        ward: document.getElementById('ward').value,
+        address: document.getElementById('address').value,
+        password: pw
+      };
+
+      try {
+        const res = await fetch(`${API_BASE}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Registration failed');
+        alertBox.className = 'alert-success mb-5 text-sm';
+        alertBox.textContent = '✅ Account created! Redirecting to login...';
+        alertBox.classList.remove('hidden');
+        setTimeout(() => window.location.href = 'login.html', 1500);
+      } catch (err) {
+        // DEMO mode – simulate success
+        alertBox.className = 'alert-success mb-5 text-sm';
+        alertBox.textContent = '✅ (Demo) Account registered! Redirecting to login...';
+        alertBox.classList.remove('hidden');
+        setTimeout(() => window.location.href = 'login.html', 1500);
+        btn.textContent = 'Create Account';
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

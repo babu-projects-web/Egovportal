@@ -1,0 +1,6 @@
+
+// to run the Code
+
+java -cp out;mysql-connector-j-8.0.33.jar com.egov.App
+
+//add a live server

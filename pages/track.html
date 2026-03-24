@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Track Request – NagarSeva</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-[#F7F6F2] text-[#1a1a1a] font-sans">
+
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-[#F7F6F2]/90 backdrop-blur border-b border-[#e5e3dc]">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-2.5">
+        <div class="w-8 h-8 bg-[#1a6b3c] rounded-lg flex items-center justify-center">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L2 6V16H7V11H11V16H16V6L9 2Z" fill="white"/></svg>
+        </div>
+        <span class="font-display text-xl font-700">NagarSeva</span>
+      </a>
+      <a href="query.html" class="btn-primary text-sm">Submit Request</a>
+    </div>
+  </nav>
+
+  <div class="page-header mt-16">
+    <h1>Track Your Request</h1>
+    <p>Enter your Request ID to check current status</p>
+  </div>
+
+  <main class="py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto">
+
+      <!-- Search form -->
+      <div class="bg-white rounded-2xl border border-[#e5e3dc] shadow-sm p-6 mb-8">
+        <form id="trackForm" class="flex gap-3">
+          <input type="text" id="reqIdInput" class="form-input flex-1" placeholder="Enter Request ID (e.g. NS1234567)" required>
+          <button type="submit" class="btn-primary px-6">Track</button>
+        </form>
+        <p class="text-xs text-[#aaa] mt-2">Track via mobile number: <a href="#" onclick="trackByMobile()" class="text-[#1a6b3c] underline">Search by Mobile</a></p>
+      </div>
+
+      <!-- Result area -->
+      <div id="resultArea" class="hidden">
+        <div class="bg-white rounded-2xl border border-[#e5e3dc] shadow-sm overflow-hidden">
+          <!-- Header -->
+          <div class="p-6 border-b border-[#f0efe9] flex items-start justify-between">
+            <div>
+              <p class="text-xs text-[#888] uppercase tracking-wide mb-1">Request ID</p>
+              <p class="font-display text-2xl font-700 text-[#1a6b3c]" id="dispReqId">—</p>
+            </div>
+            <span id="statusBadge" class="status-badge status-pending">Pending</span>
+          </div>
+
+          <!-- Details -->
+          <div class="p-6 grid sm:grid-cols-2 gap-4 text-sm">
+            <div><p class="text-[#888] text-xs mb-0.5">Category</p><p class="font-medium" id="dispCat">—</p></div>
+            <div><p class="text-[#888] text-xs mb-0.5">Sub-Category</p><p class="font-medium" id="dispSubCat">—</p></div>
+            <div><p class="text-[#888] text-xs mb-0.5">Ward</p><p class="font-medium" id="dispWard">—</p></div>
+            <div><p class="text-[#888] text-xs mb-0.5">Priority</p><p class="font-medium" id="dispPriority">—</p></div>
+            <div><p class="text-[#888] text-xs mb-0.5">Submitted On</p><p class="font-medium" id="dispDate">—</p></div>
+            <div><p class="text-[#888] text-xs mb-0.5">Expected Resolution</p><p class="font-medium" id="dispEta">—</p></div>
+            <div class="sm:col-span-2"><p class="text-[#888] text-xs mb-0.5">Location</p><p class="font-medium" id="dispLocation">—</p></div>
+            <div class="sm:col-span-2"><p class="text-[#888] text-xs mb-0.5">Description</p><p class="text-[#555]" id="dispDesc">—</p></div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="p-6 border-t border-[#f0efe9]">
+            <p class="text-xs uppercase tracking-widest text-[#888] mb-4 font-medium">Status Timeline</p>
+            <div id="timeline" class="space-y-0"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div id="emptyState" class="hidden text-center py-12">
+        <p class="text-4xl mb-3">🔍</p>
+        <p class="font-600 text-lg">Request Not Found</p>
+        <p class="text-sm text-[#888] mt-1">Check the ID and try again, or <a href="query.html" class="text-[#1a6b3c] underline">submit a new request</a></p>
+      </div>
+
+    </div>
+  </main>
+
+  <style>
+    .timeline-item { display: flex; gap: 1rem; padding-bottom: 1.5rem; position: relative; }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-dot { width: 0.75rem; height: 0.75rem; border-radius: 50%; flex-shrink: 0; margin-top: 0.25rem; }
+    .timeline-dot.done { background: #1a6b3c; }
+    .timeline-dot.active { background: #3b82f6; box-shadow: 0 0 0 3px #dbeafe; }
+    .timeline-dot.pending { background: #e5e3dc; }
+    .timeline-item:not(:last-child)::before {
+      content: ''; position: absolute; left: 0.34rem; top: 1rem; width: 2px; bottom: 0;
+      background: #e5e3dc;
+    }
+  </style>
+
+  <script src="../js/app.js"></script>
+  <script>
+    const STATUSES = {
+      PENDING:    { label: 'Pending Review', color: 'status-pending' },
+      IN_REVIEW:  { label: 'Under Review', color: 'status-progress' },
+      ASSIGNED:   { label: 'Assigned to Dept.', color: 'status-progress' },
+      IN_PROGRESS:{ label: 'In Progress', color: 'status-progress' },
+      RESOLVED:   { label: 'Resolved', color: 'status-resolved' },
+      REJECTED:   { label: 'Rejected', color: 'status-rejected' }
+    };
+
+    document.getElementById('trackForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('reqIdInput').value.trim();
+      if (!id) return;
+      await trackRequest(id);
+    });
+
+    async function trackRequest(id) {
+      try {
+        const res = await fetch(`${API_BASE}/requests/${id}`);
+        if (!res.ok) throw new Error('Not found');
+        const data = await res.json();
+        displayResult(data);
+      } catch {
+        // Demo fallback: try local storage
+        const reqs = JSON.parse(localStorage.getItem('demoRequests') || '[]');
+        const found = reqs.find(r => r.id === id);
+        if (found) {
+          displayResult({
+            requestId: found.id,
+            status: found.status || 'PENDING',
+            category: found.category || 'road',
+            subCategory: 'Pothole',
+            ward: 'Ward 3 – Fairlands',
+            priority: 'Medium',
+            location: 'Near Municipal Office, Salem',
+            description: 'Submitted via NagarSeva portal.',
+            createdAt: found.date,
+            expectedResolution: new Date(Date.now() + 3*24*3600*1000).toISOString()
+          });
+        } else {
+          document.getElementById('resultArea').classList.add('hidden');
+          document.getElementById('emptyState').classList.remove('hidden');
+        }
+      }
+    }
+
+    function displayResult(data) {
+      document.getElementById('emptyState').classList.add('hidden');
+      document.getElementById('resultArea').classList.remove('hidden');
+
+      document.getElementById('dispReqId').textContent = data.requestId;
+      document.getElementById('dispCat').textContent = (data.category || '').toUpperCase();
+      document.getElementById('dispSubCat').textContent = data.subCategory || '—';
+      document.getElementById('dispWard').textContent = data.ward || '—';
+      document.getElementById('dispPriority').textContent = data.priority || '—';
+      document.getElementById('dispDate').textContent = formatDate(data.createdAt);
+      document.getElementById('dispEta').textContent = formatDate(data.expectedResolution);
+      document.getElementById('dispLocation').textContent = data.location || '—';
+      document.getElementById('dispDesc').textContent = data.description || '—';
+
+      const st = STATUSES[data.status] || STATUSES.PENDING;
+      const badge = document.getElementById('statusBadge');
+      badge.textContent = st.label;
+      badge.className = `status-badge ${st.color}`;
+
+      // Build timeline
+      const steps = ['PENDING','IN_REVIEW','ASSIGNED','IN_PROGRESS','RESOLVED'];
+      const currentIdx = steps.indexOf(data.status);
+      const tl = document.getElementById('timeline');
+      tl.innerHTML = '';
+      steps.forEach((s, i) => {
+        const isDone = i < currentIdx;
+        const isActive = i === currentIdx;
+        const dotClass = isDone ? 'done' : isActive ? 'active' : 'pending';
+        const textColor = isDone || isActive ? '#1a1a1a' : '#bbb';
+        tl.innerHTML += `
+          <div class="timeline-item">
+            <div class="timeline-dot ${dotClass}"></div>
+            <div>
+              <p class="text-sm font-medium" style="color:${textColor}">${STATUSES[s]?.label || s}</p>
+              ${isDone ? '<p class="text-xs text-[#888]">Completed</p>' : isActive ? '<p class="text-xs text-[#3b82f6]">Current Status</p>' : ''}
+            </div>
+          </div>`;
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Submit Request – NagarSeva</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-[#F7F6F2] text-[#1a1a1a] font-sans">
+
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-[#F7F6F2]/90 backdrop-blur border-b border-[#e5e3dc]">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-2.5">
+        <div class="w-8 h-8 bg-[#1a6b3c] rounded-lg flex items-center justify-center">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L2 6V16H7V11H11V16H16V6L9 2Z" fill="white"/></svg>
+        </div>
+        <span class="font-display text-xl font-700">NagarSeva</span>
+      </a>
+      <div class="flex gap-2">
+        <a href="track.html" class="btn-ghost text-sm">Track Request</a>
+        <a href="dashboard.html" class="btn-primary text-sm">Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-header mt-16">
+    <h1>Submit a Service Request</h1>
+    <p>Fill in the details below to raise a complaint or service request</p>
+  </div>
+
+  <main class="py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+
+      <!-- Category pills -->
+      <div class="flex flex-wrap gap-2 mb-8 justify-center">
+        <button onclick="selectCategory(this,'road')" class="cat-pill active" data-cat="road">🛣️ Road</button>
+        <button onclick="selectCategory(this,'water')" class="cat-pill" data-cat="water">💧 Water</button>
+        <button onclick="selectCategory(this,'waste')" class="cat-pill" data-cat="waste">♻️ Waste</button>
+        <button onclick="selectCategory(this,'light')" class="cat-pill" data-cat="light">💡 Lighting</button>
+        <button onclick="selectCategory(this,'cert')" class="cat-pill" data-cat="cert">📄 Certificate</button>
+        <button onclick="selectCategory(this,'tax')" class="cat-pill" data-cat="tax">🏠 Property Tax</button>
+        <button onclick="selectCategory(this,'health')" class="cat-pill" data-cat="health">🏥 Health</button>
+        <button onclick="selectCategory(this,'other')" class="cat-pill" data-cat="other">📋 Other</button>
+      </div>
+
+      <div id="alertBox" class="hidden mb-6"></div>
+
+      <div class="bg-white rounded-2xl border border-[#e5e3dc] shadow-sm p-8">
+        <form id="queryForm" class="space-y-5">
+          <!-- Hidden category field -->
+          <input type="hidden" id="category" value="road">
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="form-label">Applicant Name *</label>
+              <input type="text" id="applicantName" class="form-input" placeholder="Your full name" required>
+            </div>
+            <div>
+              <label class="form-label">Mobile Number *</label>
+              <input type="tel" id="mobile" class="form-input" placeholder="10-digit mobile" required>
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="form-label">Email Address</label>
+              <input type="email" id="email" class="form-input" placeholder="For updates (optional)">
+            </div>
+            <div>
+              <label class="form-label">Ward Number *</label>
+              <select id="ward" class="form-input" required>
+                <option value="">Select Ward...</option>
+                <option>Ward 1 – Gandhi Nagar</option>
+                <option>Ward 2 – Suramangalam</option>
+                <option>Ward 3 – Fairlands</option>
+                <option>Ward 4 – Hasthampatti</option>
+                <option>Ward 5 – Ammapet</option>
+                <option>Ward 6 – Kondalampatti</option>
+                <option>Ward 7 – Shevapet</option>
+                <option>Ward 8 – Meyyanur</option>
+                <option>Ward 9 – Gugai</option>
+                <option>Ward 10 – Swarnapuri</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="form-label">Location / Address of Issue *</label>
+            <input type="text" id="location" class="form-input" placeholder="Street name, landmark, area..." required>
+          </div>
+
+          <div>
+            <label class="form-label">Sub-Category / Type *</label>
+            <select id="subCategory" class="form-input" required>
+              <option value="">Select type...</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="form-label">Priority Level</label>
+            <div class="flex gap-3 mt-1">
+              <label class="priority-radio">
+                <input type="radio" name="priority" value="low"> <span>Low</span>
+              </label>
+              <label class="priority-radio">
+                <input type="radio" name="priority" value="medium" checked> <span>Medium</span>
+              </label>
+              <label class="priority-radio">
+                <input type="radio" name="priority" value="high"> <span>High</span>
+              </label>
+              <label class="priority-radio">
+                <input type="radio" name="priority" value="urgent"> <span>Urgent</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label class="form-label">Detailed Description *</label>
+            <textarea id="description" rows="4" class="form-input resize-none"
+              placeholder="Describe the issue clearly — what, where, since when, impact on residents..." required></textarea>
+            <p class="text-xs text-[#aaa] mt-1"><span id="charCount">0</span>/500 characters</p>
+          </div>
+
+          <div>
+            <label class="form-label">Upload Photos / Documents</label>
+            <div id="uploadArea" class="border-2 border-dashed border-[#ddd] rounded-xl p-6 text-center hover:border-[#1a6b3c] transition-colors cursor-pointer">
+              <input type="file" id="fileInput" class="hidden" multiple accept="image/*,.pdf">
+              <div onclick="document.getElementById('fileInput').click()">
+                <p class="text-3xl mb-2">📎</p>
+                <p class="text-sm text-[#666]">Click to upload or drag & drop</p>
+                <p class="text-xs text-[#aaa] mt-1">JPG, PNG, PDF up to 5MB each</p>
+              </div>
+              <div id="fileList" class="mt-3 text-left hidden"></div>
+            </div>
+          </div>
+
+          <div class="flex gap-3 pt-2">
+            <button type="submit" class="btn-primary flex-1 py-3 text-base">Submit Request</button>
+            <button type="reset" class="btn-ghost px-6 py-3">Reset</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- SUCCESS MODAL -->
+  <div id="successModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl p-8 max-w-md mx-4 text-center shadow-2xl">
+      <div class="w-16 h-16 bg-[#d1fae5] rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1a6b3c" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2 class="font-display text-2xl font-700 mb-2">Request Submitted!</h2>
+      <p class="text-[#666] text-sm mb-4">Your service request has been successfully registered.</p>
+      <div class="bg-[#f7f6f2] rounded-xl p-4 mb-5">
+        <p class="text-xs text-[#888]">Request ID</p>
+        <p class="font-display text-2xl font-700 text-[#1a6b3c]" id="reqId">—</p>
+        <p class="text-xs text-[#888] mt-1">Save this ID for tracking</p>
+      </div>
+      <div class="flex gap-2">
+        <a href="track.html" class="btn-primary flex-1 py-2.5">Track Status</a>
+        <button onclick="closeModal()" class="btn-ghost flex-1 py-2.5">Submit Another</button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .cat-pill { padding: 0.4rem 1rem; border-radius: 999px; font-size: 0.8rem; font-weight: 500; border: 1.5px solid #e5e3dc; background: white; cursor: pointer; transition: all 0.15s; color: #444; }
+    .cat-pill:hover { border-color: #1a6b3c; color: #1a6b3c; }
+    .cat-pill.active { background: #1a6b3c; color: white; border-color: #1a6b3c; }
+    .priority-radio { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer; padding: 0.4rem 0.75rem; border-radius: 0.5rem; border: 1.5px solid #e5e3dc; color: #555; transition: all 0.15s; }
+    .priority-radio:has(input:checked) { border-color: #1a6b3c; background: #f0fdf4; color: #1a6b3c; }
+  </style>
+
+  <script src="../js/app.js"></script>
+  <script>
+    const subCategories = {
+      road: ['Pothole', 'Road Damage', 'Speed Breaker', 'Footpath Issue', 'Encroachment', 'Other'],
+      water: ['Water Leakage', 'No Water Supply', 'Contaminated Water', 'New Connection', 'Bill Issue', 'Other'],
+      waste: ['Garbage Not Collected', 'Illegal Dumping', 'Stray Animals', 'Blocked Drain', 'Other'],
+      light: ['Streetlight Not Working', 'New Streetlight', 'Damaged Pole', 'Faulty Wiring', 'Other'],
+      cert: ['Birth Certificate', 'Death Certificate', 'Domicile Certificate', 'Trade License', 'NOC Request', 'Other'],
+      tax: ['Property Assessment', 'Tax Payment Issue', 'New Assessment', 'Correction in Records', 'Other'],
+      health: ['Mosquito Menace', 'Stagnant Water', 'Open Defecation', 'Sewage Overflow', 'Other'],
+      other: ['General Complaint', 'Suggestion', 'Information Request', 'Illegal Construction', 'Other']
+    };
+
+    function selectCategory(el, cat) {
+      document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('category').value = cat;
+      const select = document.getElementById('subCategory');
+      select.innerHTML = '<option value="">Select type...</option>';
+      (subCategories[cat] || []).forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s; opt.textContent = s;
+        select.appendChild(opt);
+      });
+    }
+
+    // Init with road subcategories
+    selectCategory(document.querySelector('.cat-pill.active'), 'road');
+
+    // Pre-fill from URL params
+    const urlCat = new URLSearchParams(location.search).get('cat');
+    if (urlCat) {
+      const btn = document.querySelector(`[data-cat="${urlCat}"]`);
+      if (btn) selectCategory(btn, urlCat);
+    }
+
+    // Char counter
+    document.getElementById('description').addEventListener('input', (e) => {
+      document.getElementById('charCount').textContent = Math.min(e.target.value.length, 500);
+    });
+
+    // File upload
+    document.getElementById('fileInput').addEventListener('change', (e) => {
+      const list = document.getElementById('fileList');
+      list.innerHTML = '';
+      Array.from(e.target.files).forEach(f => {
+        list.innerHTML += `<div class="text-xs text-[#555] py-1 flex items-center gap-1.5">📎 ${f.name}</div>`;
+      });
+      list.classList.toggle('hidden', e.target.files.length === 0);
+    });
+
+    // Pre-fill user data
+    const user = getUser();
+    if (user) {
+      if (document.getElementById('applicantName')) document.getElementById('applicantName').value = user.fullName || '';
+      if (document.getElementById('email')) document.getElementById('email').value = user.email || '';
+      if (user.phone && document.getElementById('mobile')) document.getElementById('mobile').value = user.phone;
+    }
+
+    document.getElementById('queryForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const alertBox = document.getElementById('alertBox');
+
+      const payload = {
+        applicantName: document.getElementById('applicantName').value,
+        mobile: document.getElementById('mobile').value,
+        email: document.getElementById('email').value,
+        ward: document.getElementById('ward').value,
+        location: document.getElementById('location').value,
+        category: document.getElementById('category').value,
+        subCategory: document.getElementById('subCategory').value,
+        priority: document.querySelector('input[name="priority"]:checked').value,
+        description: document.getElementById('description').value,
+        status: 'PENDING'
+      };
+
+      try {
+        const res = await fetch(`${API_BASE}/requests`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+        showSuccess(data.requestId);
+      } catch {
+        // DEMO fallback
+        const demoId = 'NS' + Date.now().toString().slice(-7);
+        showSuccess(demoId);
+      }
+    });
+
+    function showSuccess(id) {
+      document.getElementById('reqId').textContent = id;
+      document.getElementById('successModal').classList.remove('hidden');
+      document.getElementById('successModal').classList.add('flex');
+      // Save to local demo storage
+      const reqs = JSON.parse(localStorage.getItem('demoRequests') || '[]');
+      reqs.unshift({ id, date: new Date().toISOString(), status: 'PENDING', category: document.getElementById('category').value });
+      localStorage.setItem('demoRequests', JSON.stringify(reqs));
+    }
+
+    function closeModal() {
+      document.getElementById('successModal').classList.add('hidden');
+      document.getElementById('successModal').classList.remove('flex');
+      document.getElementById('queryForm').reset();
+      selectCategory(document.querySelector('[data-cat="road"]'), 'road');
+    }
+  </script>
+</body>
+</html>

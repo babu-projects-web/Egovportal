@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Office Locations – NagarSeva</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-[#F7F6F2] text-[#1a1a1a] font-sans">
+
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-[#F7F6F2]/90 backdrop-blur border-b border-[#e5e3dc]">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-2.5">
+        <div class="w-8 h-8 bg-[#1a6b3c] rounded-lg flex items-center justify-center">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L2 6V16H7V11H11V16H16V6L9 2Z" fill="white"/></svg>
+        </div>
+        <span class="font-display text-xl font-700">NagarSeva</span>
+      </a>
+      <a href="query.html" class="btn-primary text-sm">Submit Request</a>
+    </div>
+  </nav>
+
+  <div class="page-header mt-16">
+    <h1>Office Locations</h1>
+    <p>Find municipal offices and service centers near you</p>
+  </div>
+
+  <main class="py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
+
+      <!-- Search -->
+      <div class="bg-white rounded-2xl border border-[#e5e3dc] p-4 mb-8 flex gap-3">
+        <input type="text" id="searchInput" class="form-input flex-1" placeholder="Search by area, ward, or service...">
+        <select id="serviceFilter" class="form-input w-auto">
+          <option value="">All Services</option>
+          <option>Birth/Death Certificate</option>
+          <option>Water Supply</option>
+          <option>Property Tax</option>
+          <option>Trade License</option>
+        </select>
+      </div>
+
+      <!-- Map placeholder -->
+      <div class="bg-white rounded-2xl border border-[#e5e3dc] overflow-hidden mb-8 h-64 flex items-center justify-center relative">
+        <div class="absolute inset-0 bg-gradient-to-br from-[#e8f5e9] to-[#e3f2fd]">
+          <!-- Fake map grid -->
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" class="opacity-30">
+            <defs>
+              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1a6b3c" stroke-width="0.5"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)"/>
+          </svg>
+        </div>
+        <div class="relative text-center">
+          <p class="text-4xl mb-2">🗺️</p>
+          <p class="font-600 text-[#333]">Interactive Map</p>
+          <p class="text-sm text-[#888]">Connect Google Maps API for live map</p>
+        </div>
+        <!-- Pin markers -->
+        <div class="absolute top-1/3 left-1/3 w-6 h-6 bg-[#1a6b3c] rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white text-xs">1</div>
+        <div class="absolute top-1/2 left-1/2 w-6 h-6 bg-[#1a6b3c] rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white text-xs">2</div>
+        <div class="absolute top-2/3 left-2/5 w-6 h-6 bg-[#1a6b3c] rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white text-xs">3</div>
+      </div>
+
+      <!-- Office Cards -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5" id="officeCards">
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="bg-[#111] text-[#aaa] py-8 px-4 text-center text-sm mt-8">
+    <p>© 2025 NagarSeva – Municipal E-Governance Portal.</p>
+  </footer>
+
+  <script src="../js/app.js"></script>
+  <script>
+    const offices = [
+      { id: 1, name: 'Main Municipal Office', area: 'Gandhi Nagar', address: 'No. 1, Corporation Road, Salem – 636001', phone: '0427-2226789', hours: 'Mon–Fri: 9am–5pm, Sat: 9am–1pm', services: ['All Services', 'Birth/Death Certificate', 'Property Tax', 'Trade License'], ward: 'Ward 1' },
+      { id: 2, name: 'Zone II Sub-Office', area: 'Fairlands', address: 'No. 45, Omalur Road, Fairlands, Salem – 636016', phone: '0427-2415678', hours: 'Mon–Fri: 9am–5pm', services: ['Water Supply', 'Waste Management', 'Street Light'], ward: 'Ward 3' },
+      { id: 3, name: 'Ammapet Ward Office', area: 'Ammapet', address: 'Near Ammapet Bus Stand, Salem – 636015', phone: '0427-2412345', hours: 'Mon–Fri: 9am–5pm', services: ['Property Tax', 'General Complaints', 'Birth Certificate'], ward: 'Ward 5' },
+      { id: 4, name: 'Health & Sanitation Dept.', area: 'Hasthampatti', address: 'Municipal Health Office, Hasthampatti, Salem', phone: '0427-2221567', hours: 'Mon–Sat: 9am–5pm', services: ['Public Health', 'Sanitation', 'Mosquito Control'], ward: 'Ward 4' },
+      { id: 5, name: 'Revenue Sub-Office', area: 'Suramangalam', address: 'Suramangalam Main Road, Salem – 636005', phone: '0427-2443210', hours: 'Mon–Fri: 9am–5pm', services: ['Property Assessment', 'Tax Payment', 'Domicile Certificate'], ward: 'Ward 2' },
+      { id: 6, name: 'Citizen Help Centre', area: 'Meyyanur', address: 'Meyyanur Market Complex, Salem – 636009', phone: '1800-XXX-XXXX', hours: 'Mon–Sat: 9am–6pm', services: ['All Services', 'Document Collection', 'Enquiry'], ward: 'Ward 8' }
+    ];
+
+    function renderOffices(list) {
+      document.getElementById('officeCards').innerHTML = list.map(o => `
+        <div class="bg-white rounded-xl border border-[#e5e3dc] p-5 hover:shadow-md transition-shadow">
+          <div class="flex items-start justify-between mb-3">
+            <div class="w-9 h-9 bg-[#1a6b3c]/10 rounded-lg flex items-center justify-center text-lg">🏛️</div>
+            <span class="text-xs bg-[#f0fdf4] text-[#166534] px-2.5 py-0.5 rounded-full font-medium">${o.ward}</span>
+          </div>
+          <h3 class="font-600 mb-1">${o.name}</h3>
+          <p class="text-xs text-[#1a6b3c] font-medium mb-2">${o.area}</p>
+          <p class="text-sm text-[#666] mb-3">📍 ${o.address}</p>
+          <p class="text-sm text-[#555] mb-1">📞 ${o.phone}</p>
+          <p class="text-sm text-[#555] mb-3">🕐 ${o.hours}</p>
+          <div class="flex flex-wrap gap-1.5">
+            ${o.services.slice(0,3).map(s => `<span class="text-xs bg-[#f7f6f2] text-[#555] px-2 py-0.5 rounded-lg">${s}</span>`).join('')}
+            ${o.services.length > 3 ? `<span class="text-xs text-[#888]">+${o.services.length-3}</span>` : ''}
+          </div>
+          <a href="https://maps.google.com?q=${encodeURIComponent(o.address)}" target="_blank" class="mt-3 text-sm text-[#1a6b3c] font-medium hover:underline block">Get Directions →</a>
+        </div>
+      `).join('');
+    }
+
+    renderOffices(offices);
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      renderOffices(offices.filter(o =>
+        o.name.toLowerCase().includes(q) || o.area.toLowerCase().includes(q) || o.ward.toLowerCase().includes(q)
+      ));
+    });
+  </script>
+</body>
+</html>

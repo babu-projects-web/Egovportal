@@ -1,0 +1,151 @@
+# NagarSeva – E-Governance Service Portal
+
+A full-stack citizen service portal built with **HTML/CSS/JS (Tailwind)** for frontend and **Java + JDBC + MySQL** for backend, connected via **RESTful API**.
+
+---
+
+## 📁 Project Structure
+
+```
+egovportal/
+├── index.html              ← Home page
+├── css/style.css           ← Global styles
+├── js/app.js               ← Frontend API logic
+├── ./pages/
+│   ├── login.html          ← Citizen login
+│   ├── register.html       ← Citizen registration
+│   ├── query.html          ← Submit service request
+│   ├── track.html          ← Track request by ID
+│   ├── dashboard.html      ← Citizen dashboard
+│   ├── about.html          ← About the portal
+│   ├── services.html       ← All services & SLA
+│   └── locations.html      ← Office locations
+└── backend/
+    ├── schema.sql          ← MySQL database schema
+    └── src/main/java/com/egov/
+        ├── App.java                    ← Server entry point (port 8080)
+        ├── controller/
+        │   ├── AuthController.java     ← Register & Login APIs
+        │   └── RequestController.java  ← Service request APIs
+        └── util/
+            ├── DBConnection.java       ← JDBC MySQL connection
+            └── CORSUtil.java           ← CORS + JSON helpers
+```
+
+└── backend/                   ← Java backend project
+    ├── schema.sql
+    └── src/
+        └── main/
+            └── java/
+                └── com/
+                    └── egov/
+                        ├── App.java
+                        ├── controller/
+                        │   ├── AuthController.java
+                        │   └── RequestController.java
+                        └── util/
+                            ├── DBConnection.java
+                            └── CORSUtil.java
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1. MySQL Database
+
+```bash
+mysql -u root -p < backend/schema.sql
+```
+
+Edit `DBConnection.java` and update:
+```java
+private static final String DB_PASS = "your_mysql_password";
+```
+
+### 2. Java Backend
+
+**Requirements:** Java 11+, MySQL Connector/J
+
+```bash
+# Download MySQL JDBC driver
+wget https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar
+
+# Compile
+cd backend
+find src -name "*.java" > sources.txt
+javac -cp .:mysql-connector-j-8.0.33.jar @sources.txt -d out/
+
+# Run
+java -cp out:mysql-connector-j-8.0.33.jar com.egov.App
+```
+
+Server starts at: `http://localhost:8080`
+
+### 3. Frontend
+
+Open `index.html` in a browser, or serve with:
+
+```bash
+# Python (simple)
+python3 -m http.server 3000
+
+# OR use VS Code Live Server extension
+```
+
+Access at: `http://localhost:3000`
+
+---
+
+## 🔗 API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/register` | Register new citizen |
+| POST | `/api/auth/login` | Login & get token |
+| POST | `/api/requests` | Submit service request |
+| GET  | `/api/requests/{id}` | Get request by ID |
+| GET  | `/api/requests/user/{userId}` | Get all requests by user |
+| GET  | `/api/health` | Health check |
+
+---
+
+## 📱 Features
+
+- ✅ Responsive design with Tailwind CSS
+- ✅ 8 service categories (Road, Water, Waste, Lighting, Certificates, Tax, Health, Other)
+- ✅ Citizen registration with Aadhaar number
+- ✅ Password hashing (SHA-256)
+- ✅ Unique request ID generation (e.g. NS1234567)
+- ✅ Real-time request tracking with status timeline
+- ✅ Citizen dashboard with stats
+- ✅ Request priority levels (Low / Medium / High / Urgent)
+- ✅ SLA table by service category
+- ✅ Demo mode (works without backend server)
+- ✅ CORS enabled for frontend-backend separation
+
+---
+
+## 🎨 Color Palette
+
+| Role | Color |
+|------|-------|
+| Primary | `#1a6b3c` (Deep Green) |
+| Background | `#F7F6F2` (Warm Off-white) |
+| Borders | `#e5e3dc` |
+| Text | `#1a1a1a` |
+| Muted | `#777` |
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | HTML5, Tailwind CSS, Vanilla JS |
+| Backend | Java 17 (built-in HttpServer) |
+| Database | MySQL 8 |
+| Connectivity | JDBC (mysql-connector-j) |
+| API Style | RESTful JSON API |
+| Auth | SHA-256 password hashing |
+
+> **Production Note:** Replace SHA-256 with BCrypt, use JWT tokens, add HTTPS/TLS, implement rate limiting.

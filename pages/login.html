@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – NagarSeva</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-[#F7F6F2] text-[#1a1a1a] font-sans min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-[#F7F6F2]/90 backdrop-blur border-b border-[#e5e3dc]">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-2.5">
+        <div class="w-8 h-8 bg-[#1a6b3c] rounded-lg flex items-center justify-center">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L2 6V16H7V11H11V16H16V6L9 2Z" fill="white"/></svg>
+        </div>
+        <span class="font-display text-xl font-700">NagarSeva</span>
+      </a>
+      <a href="register.html" class="btn-primary text-sm">Register →</a>
+    </div>
+  </nav>
+
+  <main class="flex-1 flex items-center justify-center px-4 pt-24 pb-12">
+    <div class="w-full max-w-md">
+      <div class="text-center mb-8">
+        <div class="inline-flex w-14 h-14 bg-[#1a6b3c]/10 rounded-2xl items-center justify-center mb-4">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1a6b3c" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <h1 class="font-display text-3xl font-700">Welcome Back</h1>
+        <p class="text-[#777] text-sm mt-1">Sign in to your citizen account</p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-[#e5e3dc] shadow-sm p-8">
+        <div id="alertBox" class="hidden mb-4"></div>
+
+        <form id="loginForm" class="space-y-4">
+          <div>
+            <label class="form-label">Email Address</label>
+            <input type="email" id="email" class="form-input" placeholder="you@example.com" required>
+          </div>
+          <div>
+            <label class="form-label">Password</label>
+            <div class="relative">
+              <input type="password" id="password" class="form-input pr-10" placeholder="••••••••" required>
+              <button type="button" onclick="togglePass()" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#999]">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-sm">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="remember" class="rounded accent-[#1a6b3c]">
+              <span class="text-[#555]">Remember me</span>
+            </label>
+            <a href="#" class="text-[#1a6b3c] hover:underline">Forgot password?</a>
+          </div>
+          <button type="submit" id="loginBtn" class="btn-primary w-full py-3 mt-2 text-base">
+            Sign In
+          </button>
+        </form>
+
+        <div class="mt-6 pt-5 border-t border-[#f0efe9] text-center text-sm text-[#777]">
+          Don't have an account?
+          <a href="register.html" class="text-[#1a6b3c] font-medium hover:underline ml-1">Register here</a>
+        </div>
+      </div>
+
+      <!-- Demo credentials -->
+      <div class="mt-4 p-4 bg-[#fffbeb] border border-[#fde68a] rounded-xl text-xs text-[#78350f]">
+        <p class="font-600 mb-1">⚡ Demo Credentials</p>
+        <p>Email: demo@nagarseva.gov.in | Password: Demo@123</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="../js/app.js"></script>
+  <script>
+    function togglePass() {
+      const inp = document.getElementById('password');
+      inp.type = inp.type === 'password' ? 'text' : 'password';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('loginBtn');
+      const alertBox = document.getElementById('alertBox');
+      btn.textContent = 'Signing in...';
+      btn.disabled = true;
+
+      const payload = {
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value
+      };
+
+      try {
+        // API call to backend
+        const res = await fetch(`${API_BASE}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.message || 'Login failed');
+
+        const storage = document.getElementById('remember').checked ? localStorage : sessionStorage;
+        storage.setItem('user', JSON.stringify(data));
+
+        alertBox.className = 'alert-success mb-4 text-sm';
+        alertBox.textContent = '✅ Login successful! Redirecting...';
+        alertBox.classList.remove('hidden');
+        setTimeout(() => window.location.href = 'dashboard.html', 1200);
+
+      } catch (err) {
+        // DEMO fallback
+        if (payload.email === 'demo@nagarseva.gov.in' && payload.password === 'Demo@123') {
+          const demoUser = { id: 1, fullName: 'Demo Citizen', email: payload.email, token: 'demo-token' };
+          const storage = document.getElementById('remember').checked ? localStorage : sessionStorage;
+          storage.setItem('user', JSON.stringify(demoUser));
+          alertBox.className = 'alert-success mb-4 text-sm';
+          alertBox.textContent = '✅ Demo login successful!';
+          alertBox.classList.remove('hidden');
+          setTimeout(() => window.location.href = 'dashboard.html', 1000);
+        } else {
+          alertBox.className = 'alert-error mb-4 text-sm';
+          alertBox.textContent = '❌ ' + (err.message || 'Invalid email or password');
+          alertBox.classList.remove('hidden');
+        }
+        btn.textContent = 'Sign In';
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
