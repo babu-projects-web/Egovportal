@@ -1,5 +1,0 @@
-build:
-  command: mvn clean package
-
-run:
-  command: java -jar target/egov-backend-1.0.jar
