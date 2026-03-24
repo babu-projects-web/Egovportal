@@ -1,6 +1,10 @@
 
 // to run the Code
 
+for /f "tokens=5" %a in ('netstat -ano ^| findstr :3000') do taskkill /PID %a /F // kill 3000 local host
+
 java -cp out;mysql-connector-j-8.0.33.jar com.egov.App
+
+
 
 //add a live server

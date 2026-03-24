@@ -10,9 +10,9 @@ import java.sql.Statement;
  */
 public class DBConnection {
 
-    private static final String DB_URL  = "jdbc:mysql://localhost:3306/nagarseva?useSSL=false&serverTimezone=UTC";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/nagarseva?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
     private static final String DB_USER = "root";
-    private static final String DB_PASS = "12345678babu"; // Change this
+    private static final String DB_PASS = "2k20cse153@A"; // Change this
 
     public static void init() {
         try {
